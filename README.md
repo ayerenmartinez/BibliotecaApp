@@ -27,4 +27,4 @@
 1. Clona el repositorio:
 
 ```bash
-git clone https://github.com/tuusuario/BibliotecaApp.git
+git clone https://github.com/ayerenmartinez/BibliotecaApp.git
