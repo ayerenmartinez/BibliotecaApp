@@ -1,4 +1,8 @@
 <%@page import="com.systematic.app.biblioteca.models.Usuario"%>
+<jsp:include page="modals/modalLogout.jsp" />
+<jsp:include page="modals/modalLogoutSuccess.jsp" />
+<jsp:include page="modals/modalNuevaCategoria.jsp" />
+<jsp:include page="modals/modalEditarCategoria.jsp" />
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
     Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
@@ -30,6 +34,13 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/adminlte/plugins/daterangepicker/daterangepicker.css">
         <!-- summernote -->
         <link rel="stylesheet" href="${pageContext.request.contextPath}/adminlte/plugins/summernote/summernote-bs4.min.css">
+        <!!<!-- estilos propios -->
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css"/>
+        <!-- DataTables CSS -->
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap4.css">
+        <!-- SweetAlert2-->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     </head>
     <body class="hold-transition sidebar-mini layout-fixed">
         <div class="wrapper">
@@ -79,7 +90,7 @@
                                 <i class="fas fa-user-circle mr-2"></i> Mi Perfil
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a href="${pageContext.request.contextPath}/logout" class="dropdown-item">
+                            <a href="#" class="dropdown-item" data-toggle="modal" data-target="#logoutModal">
                                 <i class="fas fa-sign-out-alt mr-2"></i> Cerrar Sesión
                             </a>
                         </div>
@@ -93,7 +104,7 @@
                 <!-- Brand Logo -->
                 <a href="index3.html" class="brand-link">
                     <img src="${pageContext.request.contextPath}/adminlte/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-                    <span class="brand-text font-weight-light">AdminLTE 3</span>
+                    <span class="brand-text font-weight-light">BibliotecaAPP</span>
                 </a>
 
                 <!-- Sidebar -->
@@ -128,11 +139,10 @@
                             <!-- Add icons to the links using the .nav-icon class
                                  with font-awesome or any other icon font library -->
                             <li class="nav-item menu-open">
-                                <a href="#" class="nav-link active">
+                                <a href="#" class="nav-link active" id="btnDashboard">
                                     <i class="nav-icon fas fa-tachometer-alt"></i>
                                     <p>
                                         Dashboard
-                                        <i class="right fas fa-angle-left"></i>
                                     </p>
                                 </a>
                             </li>
@@ -140,7 +150,7 @@
 
                             <li class="nav-header">EXAMPLES</li>
 
-                            <li class="nav-item">
+                            <li class="nav-item menu-open">
                                 <a href="#" class="nav-link">
                                     <i class="nav-icon fas fa-book"></i>
                                     <p>
@@ -150,32 +160,44 @@
                                 </a>
                                 <ul class="nav nav-treeview">
                                     <li class="nav-item">
-                                        <a href="pages/examples/invoice.html" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
+                                        <a href="pages/examples/invoice.html" class="nav-link"  id="btnCategorias">
+                                            <i class="far fas fa-layer-group nav-icon"></i>
                                             <p>Categorias de Libros</p>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="pages/examples/profile.html" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
+                                        <a href="pages/examples/profile.html" class="nav-link" id="btnAutores">
+                                            <i class="fas fa-user-edit nav-icon"></i>
                                             <p>Autores</p>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="pages/examples/e-commerce.html" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
+                                        <a href="pages/examples/profile.html" class="nav-link" id="btnEditoriales">
+                                            <i class="fas fa-building nav-icon"></i>
+                                            <p>Editoriales</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="pages/examples/e-commerce.html" class="nav-link" id="btnLibros">
+                                            <i class="fas fa-book nav-icon"></i>
                                             <p>Libros</p>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="pages/examples/projects.html" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
+                                        <a href="pages/examples/projects.html" class="nav-link" id="btnPrestamos">
+                                            <i class="fas fa-exchange-alt nav-icon"></i>
                                             <p>Prestamos</p>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="pages/examples/project-add.html" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
+                                        <a href="pages/examples/project-add.html" class="nav-link" id="btnCargos">
+                                            <i class="fas fa-user-tie nav-icon"></i>
+                                            <p>Cargos</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="pages/examples/project-add.html" class="nav-link" id="btnUsuarios">
+                                            <i class="fas fa-users nav-icon"></i>
                                             <p>Usuarios</p>
                                         </a>
                                     </li>
@@ -195,7 +217,7 @@
                 <section class="content">
                     <div class="container-fluid">
                         <!-- Aquí se cargará las páginas sin recargar -->  
-                        <div id="contenido-dinamico"></div>
+                        <div id="contenido-dinamico" class="content-wrapper p-3"></div>
                     </div><!-- /.container-fluid -->
                 </section>
                 <!-- /.content -->
@@ -249,9 +271,12 @@
         <script src="${pageContext.request.contextPath}/adminlte/dist/js/adminlte.js"></script>
         <!-- AdminLTE for demo purposes -->
         <script src="${pageContext.request.contextPath}/adminlte/dist/js/demo.js"></script>
-        <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-        <script src="${pageContext.request.contextPath}/adminlte/dist/js/pages/dashboard.js"></script>
+        <!-- DataTables JS -->
+        <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
         <!--Script para agregar contenido dinámico en el dashboard -->
         <script src="../js/contenidoDinamico.js"></script>
+        <!--Script para categorias.js -->
+        <script src="../js/categorias.js"></script>
     </body>
 </html>
