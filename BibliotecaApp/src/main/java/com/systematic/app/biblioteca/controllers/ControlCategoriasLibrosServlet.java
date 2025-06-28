@@ -68,8 +68,8 @@ public class ControlCategoriasLibrosServlet extends HttpServlet {
                     break;
                 }
                 case "editar": {
-                    Integer idCategoria = Integer.valueOf(req.getParameter("IdCategoria"));
-                    String nombreCategoria = req.getParameter("txtNombreCategoria");
+                    Integer idCategoria = Integer.valueOf(req.getParameter("idCategoria"));
+                    String nombreCategoria = req.getParameter("nombreCategoria");
                     if (idCategoria == null || nombreCategoria == null) {
                         resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Datos incompletos para editar la categoría");
                         return;
@@ -102,7 +102,7 @@ public class ControlCategoriasLibrosServlet extends HttpServlet {
 
         } catch (Exception e) {
             e.printStackTrace();
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro al registrar la categoría");
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al registrar la categoría");
         }
     }
 

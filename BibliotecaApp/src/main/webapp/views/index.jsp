@@ -104,7 +104,7 @@
                 <!-- Brand Logo -->
                 <a href="index3.html" class="brand-link">
                     <img src="${pageContext.request.contextPath}/adminlte/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-                    <span class="brand-text font-weight-light">AdminLTE 3</span>
+                    <span class="brand-text font-weight-light">BibliotecaAPP</span>
                 </a>
 
                 <!-- Sidebar -->
@@ -139,11 +139,10 @@
                             <!-- Add icons to the links using the .nav-icon class
                                  with font-awesome or any other icon font library -->
                             <li class="nav-item menu-open">
-                                <a href="#" class="nav-link active">
+                                <a href="#" class="nav-link active" id="btnDashboard">
                                     <i class="nav-icon fas fa-tachometer-alt"></i>
                                     <p>
                                         Dashboard
-                                        <i class="right fas fa-angle-left"></i>
                                     </p>
                                 </a>
                             </li>
@@ -151,7 +150,7 @@
 
                             <li class="nav-header">EXAMPLES</li>
 
-                            <li class="nav-item">
+                            <li class="nav-item menu-open">
                                 <a href="#" class="nav-link">
                                     <i class="nav-icon fas fa-book"></i>
                                     <p>
@@ -167,26 +166,38 @@
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="pages/examples/profile.html" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
+                                        <a href="pages/examples/profile.html" class="nav-link" id="btnAutores">
+                                            <i class="fas fa-user-edit nav-icon"></i>
                                             <p>Autores</p>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="pages/examples/e-commerce.html" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
+                                        <a href="pages/examples/profile.html" class="nav-link" id="btnEditoriales">
+                                            <i class="fas fa-building nav-icon"></i>
+                                            <p>Editoriales</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="pages/examples/e-commerce.html" class="nav-link" id="btnLibros">
+                                            <i class="fas fa-book nav-icon"></i>
                                             <p>Libros</p>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="pages/examples/projects.html" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
+                                        <a href="pages/examples/projects.html" class="nav-link" id="btnPrestamos">
+                                            <i class="fas fa-exchange-alt nav-icon"></i>
                                             <p>Prestamos</p>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="pages/examples/project-add.html" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
+                                        <a href="pages/examples/project-add.html" class="nav-link" id="btnCargos">
+                                            <i class="fas fa-user-tie nav-icon"></i>
+                                            <p>Cargos</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="pages/examples/project-add.html" class="nav-link" id="btnUsuarios">
+                                            <i class="fas fa-users nav-icon"></i>
                                             <p>Usuarios</p>
                                         </a>
                                     </li>

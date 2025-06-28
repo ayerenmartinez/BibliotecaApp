@@ -42,7 +42,8 @@
                                             data-nombre="<%=categoriaLibro.getNombreCategoria()%>">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-danger btnEliminar" data-id="<%= categoriaLibro.getIdCategoria()%>">
+                                    <button id="btnEliminar" class="btn btn-sm btn-danger" data-id="<%= categoriaLibro.getIdCategoria()%>"
+                                            data-nombre="<%=categoriaLibro.getNombreCategoria()%>">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </td>

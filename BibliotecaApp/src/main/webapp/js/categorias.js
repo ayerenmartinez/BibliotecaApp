@@ -1,5 +1,8 @@
 
 function inicializarCategorias() {
+
+    let nombreCategoriaAnterior = "";
+
     //MOSTRAR DATATABLE
     $('#tablaCategorias').DataTable({
         language: {
@@ -11,6 +14,9 @@ function inicializarCategorias() {
     $(document).on('click', '.btnEditar', function () {
         const id = $(this).data('id');
         const nombre = $(this).data('nombre');
+
+        nombreCategoriaAnterior = nombre; //Guardo el Nombre anterior de la categoría
+
         $('#editIdCategoria').val(id);
         $('#editNombreCategoria').val(nombre);
         $('#modalEditarCategoria').modal('show');
@@ -49,7 +55,7 @@ function inicializarCategorias() {
                 Swal.fire({
                     icon: 'success',
                     title: '¡Categoría registrada!',
-                     text: `La categoría "${nombreCategoria}" fue registrada correctamente.`,
+                    text: `La categoría "${nombreCategoria}" fue registrada correctamente.`,
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK'
                 });
@@ -62,4 +68,92 @@ function inicializarCategorias() {
             }
         });
     });
+
+
+    // ELIMINAR CATEGORÍA CON SWEETALERT2
+    $(document).on('click', '#btnEliminar', function () {
+        const idCategoria = $(this).data('id');
+        const nombreCategoria = $(this).data('nombre');
+
+        Swal.fire({
+            title: 'Eliminación de Categoría',
+            text: `Esta seguro de Eliminar la Categoría "${nombreCategoria}".`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: window.location.pathname.substring(0, window.location.pathname.indexOf("/", 2)) + "/categorias",
+                    method: 'POST',
+                    data: {
+                        accion: 'eliminar',
+                        idCategoria: idCategoria
+                    },
+                    success: function (response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Eliminado!',
+                            text: 'La categoría ha sido eliminada correctamente.',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            $("#btnCategorias").trigger("click"); // Recarga la vista
+                        });
+                    },
+                    error: function () {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'No se pudo eliminar la categoría.',
+                            confirmButtonColor: '#d33'
+                        });
+                    }
+                });
+            }
+        });
+    });
+
+    // EDITAR CATEGORÍA CON SWEETALERT2
+    $('#modalEditarCategoria').submit(function (e) {
+        e.preventDefault();
+
+        const idCategoria = $('#editIdCategoria').val();
+        const nombreCategoria = $('#editNombreCategoria').val();
+
+        $.ajax({
+            url: window.location.pathname.substring(0, window.location.pathname.indexOf("/", 2)) + "/categorias",
+            method: 'POST',
+            data: {
+                accion: 'editar',
+                idCategoria: idCategoria,
+                nombreCategoria: nombreCategoria
+            },
+            success: function (response) {
+                $('#modalEditarCategoria').modal('hide');
+
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Categoría actualizada!',
+                    text: `Se cambió la categoría de "${nombreCategoriaAnterior}" a "${nombreCategoria}".`,
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    $("#btnCategorias").trigger("click"); // Recarga la vista dinámica
+                });
+            },
+            error: function (xhr, status, error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'No se pudo editar la categoría.',
+                    confirmButtonColor: '#d33'
+                });
+            }
+        });
+    });
+
 }
