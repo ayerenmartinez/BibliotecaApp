@@ -11,7 +11,7 @@
 
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h3>Categorías de Libros</h3>
+                    <h3>Mantenimiento de Categorías de Libros</h3>
                 </div>
                 <div class="col-sm-6 text-right">
                     <button class="btn btn-primary" id="btnNuevaCategoria">
@@ -59,5 +59,3 @@
     </div>
 </div>
 
-<!-- cargar el script categorias-datatables.js -->
-<script src="${pageContext.request.contextPath}/js/categorias.js"></script>

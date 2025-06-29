@@ -5,6 +5,6 @@ package com.systematic.app.biblioteca.services.editorial;
  *
  * @author anthony
  */
-public class EditorialServiceImpl {
+public class EditorialServiceImpl implements EditorialService{
     
 }

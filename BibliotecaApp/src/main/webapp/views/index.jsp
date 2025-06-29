@@ -3,12 +3,15 @@
 <jsp:include page="modals/modalLogoutSuccess.jsp" />
 <jsp:include page="modals/modalNuevaCategoria.jsp" />
 <jsp:include page="modals/modalEditarCategoria.jsp" />
+<jsp:include page="modals/modalNuevoAutor.jsp" />
+<jsp:include page="modals/modalEditarCategoria.jsp" />
+<jsp:include page="modals/modalEditarAutor.jsp" />
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
     Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
 %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -278,5 +281,7 @@
         <script src="../js/contenidoDinamico.js"></script>
         <!--Script para categorias.js -->
         <script src="../js/categorias.js"></script>
+        <!-- cargar el script autores.js -->
+        <script src="../js/autores.js"></script>
     </body>
 </html>

@@ -52,6 +52,7 @@ public class ControlCategoriasLibrosServlet extends HttpServlet {
 
         try (Connection connection = DBConnection.getConnection()) {
             CategoriaLibroDAO categoriaLibroDAO = new CategoriaLibroDAOImpl(connection);
+            CategoriaLibroService categoriaLibroService = new CategoriaLibroServiceImpl(categoriaLibroDAO);
             switch (accion) {
 
                 case "registrar": {
@@ -60,10 +61,11 @@ public class ControlCategoriasLibrosServlet extends HttpServlet {
                         resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "El Nombre de la categoría es obligatorio");
                         return;
                     }
-                    CategoriaLibroService categoriaLibroService = new CategoriaLibroServiceImpl(categoriaLibroDAO);
                     CategoriaLibro categoriaLibro = new CategoriaLibro();
                     categoriaLibro.setNombreCategoria(nombreCategoria.trim());
                     categoriaLibroService.insertarCategoriaLibro(categoriaLibro);
+                    resp.setStatus(HttpServletResponse.SC_OK);
+                    resp.getWriter().write("Categoría registrada exitosamente");
                     recargarCategorias(req, resp);
                     break;
                 }
@@ -74,11 +76,12 @@ public class ControlCategoriasLibrosServlet extends HttpServlet {
                         resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Datos incompletos para editar la categoría");
                         return;
                     }
-                    CategoriaLibroService categoriaLibroService = new CategoriaLibroServiceImpl(categoriaLibroDAO);
                     CategoriaLibro categoriaLibro = new CategoriaLibro();
                     categoriaLibro.setIdCategoria(idCategoria);
                     categoriaLibro.setNombreCategoria(nombreCategoria.trim());
                     categoriaLibroService.actualizarCategoriaLibro(categoriaLibro);
+                    resp.setStatus(HttpServletResponse.SC_OK);
+                    resp.getWriter().write("Categoría editada exitosamente");
                     recargarCategorias(req, resp);
                     break;
                 }
@@ -88,8 +91,10 @@ public class ControlCategoriasLibrosServlet extends HttpServlet {
                         resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "el código de la categoría es requerido");
                         return;
                     }
-                    CategoriaLibroService categoriaLibroService = new CategoriaLibroServiceImpl(categoriaLibroDAO);
+
                     categoriaLibroService.eliminarCategoriaLibro(idCategoria);
+                    resp.setStatus(HttpServletResponse.SC_OK);
+                    resp.getWriter().write("Categoría eliminada exitosamente");
                     recargarCategorias(req, resp);
                     break;
                 }
@@ -106,12 +111,12 @@ public class ControlCategoriasLibrosServlet extends HttpServlet {
         }
     }
 
-    private void recargarCategorias(HttpServletRequest req, HttpServletResponse resp) {
+    private void recargarCategorias(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
             // Redirige al mismo servlet para recargar la lista
             resp.sendRedirect(req.getContextPath() + "/categorias");
         } catch (IOException ex) {
-            Logger.getLogger(ControlCategoriasLibrosServlet.class.getName()).log(Level.SEVERE, null, ex);
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al recargar la vista de autores");
         }
     }
 

@@ -1,83 +1,123 @@
+// 🟢 Variable global para almacenar el nombre anterior de la categoría
+var nombreCategoriaAnterior = nombreCategoriaAnterior || "";
 
 function inicializarCategorias() {
+    const contextPath = obtenerContextPath();
 
-    let nombreCategoriaAnterior = "";
+    inicializarDataTable('#tablaCategorias', contextPath);
+    mostrarModalEditarCategoria();         
+    mostrarModalNuevaCategoria();
+    registrarCategoria(contextPath);
+    editarCategoria(contextPath);          
+    eliminarCategoria(contextPath);
+    
+}
 
-    //MOSTRAR DATATABLE
-    $('#tablaCategorias').DataTable({
+function obtenerContextPath() {
+    return window.location.pathname.substring(0, window.location.pathname.indexOf("/", 2));
+}
+
+function inicializarDataTable(selector, contextPath) {
+    $(selector).DataTable({
+        pageLength: 5,
+        lengthMenu: [5, 10, 20],
+        ordering: true,
+        responsive: true,
         language: {
-            url: window.location.pathname.substring(0, window.location.pathname.indexOf("/", 2)) + "/adminlte/plugins/datatables/Spanish.json"
+            url: contextPath + "/adminlte/plugins/datatables/Spanish.json"
         }
     });
+}
 
-    //MOSTRAR MODAL PARA EDITAR DATOS
-    $(document).on('click', '.btnEditar', function () {
-        const id = $(this).data('id');
-        const nombre = $(this).data('nombre');
-
-        nombreCategoriaAnterior = nombre; //Guardo el Nombre anterior de la categoría
-
-        $('#editIdCategoria').val(id);
-        $('#editNombreCategoria').val(nombre);
-        $('#modalEditarCategoria').modal('show');
+function mostrarAlertaSweetAlert2(titulo, mensaje, icono = 'success') {
+    Swal.fire({
+        icon: icono,
+        title: titulo,
+        text: mensaje,
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'OK'
     });
+}
 
-    //MOSTRAR  MODAL PARA REGISTRAR UNA NUEVA CATEGORIA
-    $(document).on('click', '#btnNuevaCategoria', function () {
+function mostrarModalNuevaCategoria() {
+    $(document).off('click', '#btnNuevaCategoria').on('click', '#btnNuevaCategoria', function () {
         $('#modalNuevaCategoria').modal('show');
     });
+}
 
-    $('#formEditarCategoria').submit(function (e) {
-        e.preventDefault();
-        const id = $('#editIdCategoria').val();
-        const nombre = $('#editNombreCategoria').val();
-
-        // Aquí va tu AJAX o redirección
-        console.log('Editar: ', id, nombre);
-    });
-
-    // Enviar formulario de nueva categoría vía AJAX
-    $('#formNuevaCategoria').submit(function (e) {
+function registrarCategoria(contextPath) {
+    $('#formNuevaCategoria').off('submit').on('submit', function (e) {
         e.preventDefault();
 
         const nombreCategoria = $('#txtNombreCategoria').val();
 
         $.ajax({
-            url: window.location.pathname.substring(0, window.location.pathname.indexOf("/", 2)) + "/categorias",
+            url: contextPath + "/categorias",
             method: "POST",
             data: {
                 accion: "registrar",
                 txtNombreCategoria: nombreCategoria
             },
-            success: function (response) {
+            success: function () {
                 $('#modalNuevaCategoria').modal('hide');
-                // Mostrar alerta SweetAlert
-                Swal.fire({
-                    icon: 'success',
-                    title: '¡Categoría registrada!',
-                    text: `La categoría "${nombreCategoria}" fue registrada correctamente.`,
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                });
-
-                $("#btnCategorias").trigger("click"); // Recarga la vista
+                mostrarAlertaSweetAlert2('¡Categoría registrada!', `La categoría "${nombreCategoria}" fue registrada correctamente.`);
+                $("#btnCategorias").trigger("click");
             },
-            error: function (xhr, status, error) {
-                console.error("Error al registrar categoría:", error);
-                alert("Hubo un error al registrar la categoría.");
+            error: function () {
+                mostrarAlertaSweetAlert2('Error', 'Hubo un error al registrar la categoría.', 'error');
             }
         });
     });
+}
 
+function mostrarModalEditarCategoria() {
+    $(document).off('click', '.btnEditar').on('click', '.btnEditar', function () {
+        const id = $(this).data('id');
+        const nombre = $(this).data('nombre');
 
-    // ELIMINAR CATEGORÍA CON SWEETALERT2
-    $(document).on('click', '#btnEliminar', function () {
+        nombreCategoriaAnterior = nombre;
+
+        $('#editIdCategoria').val(id);
+        $('#editNombreCategoria').val(nombre);
+        $('#modalEditarCategoria').modal('show');
+    });
+}
+
+function editarCategoria(contextPath) {
+    $('#modalEditarCategoria').off('submit').on('submit', function (e) {
+        e.preventDefault();
+
+        const idCategoria = $('#editIdCategoria').val();
+        const nombreCategoria = $('#editNombreCategoria').val();
+
+        $.ajax({
+            url: contextPath + "/categorias",
+            method: 'POST',
+            data: {
+                accion: 'editar',
+                idCategoria,
+                nombreCategoria
+            },
+            success: function () {
+                $('#modalEditarCategoria').modal('hide');
+                mostrarAlertaSweetAlert2('¡Categoría actualizada!', `Se cambió de "${nombreCategoriaAnterior}" a "${nombreCategoria}".`);
+                $("#btnCategorias").trigger("click");
+            },
+            error: function () {
+                mostrarAlertaSweetAlert2('Error', 'No se pudo editar la categoría.', 'error');
+            }
+        });
+    });
+}
+
+function eliminarCategoria(contextPath) {
+    $(document).off('click', '#btnEliminar').on('click', '#btnEliminar', function () {
         const idCategoria = $(this).data('id');
         const nombreCategoria = $(this).data('nombre');
 
         Swal.fire({
             title: 'Eliminación de Categoría',
-            text: `Esta seguro de Eliminar la Categoría "${nombreCategoria}".`,
+            text: `¿Está seguro de eliminar la categoría "${nombreCategoria}"?`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#d33',
@@ -87,73 +127,21 @@ function inicializarCategorias() {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: window.location.pathname.substring(0, window.location.pathname.indexOf("/", 2)) + "/categorias",
+                    url: contextPath + "/categorias",
                     method: 'POST',
                     data: {
                         accion: 'eliminar',
-                        idCategoria: idCategoria
+                        idCategoria
                     },
-                    success: function (response) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: '¡Eliminado!',
-                            text: 'La categoría ha sido eliminada correctamente.',
-                            confirmButtonColor: '#3085d6',
-                            confirmButtonText: 'OK'
-                        }).then(() => {
-                            $("#btnCategorias").trigger("click"); // Recarga la vista
-                        });
+                    success: function () {
+                        mostrarAlertaSweetAlert2('¡Eliminado!', 'La categoría ha sido eliminada correctamente.');
+                        $("#btnCategorias").trigger("click");
                     },
                     error: function () {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'No se pudo eliminar la categoría.',
-                            confirmButtonColor: '#d33'
-                        });
+                        mostrarAlertaSweetAlert2('Error', 'No se pudo eliminar la categoría.', 'error');
                     }
                 });
             }
         });
     });
-
-    // EDITAR CATEGORÍA CON SWEETALERT2
-    $('#modalEditarCategoria').submit(function (e) {
-        e.preventDefault();
-
-        const idCategoria = $('#editIdCategoria').val();
-        const nombreCategoria = $('#editNombreCategoria').val();
-
-        $.ajax({
-            url: window.location.pathname.substring(0, window.location.pathname.indexOf("/", 2)) + "/categorias",
-            method: 'POST',
-            data: {
-                accion: 'editar',
-                idCategoria: idCategoria,
-                nombreCategoria: nombreCategoria
-            },
-            success: function (response) {
-                $('#modalEditarCategoria').modal('hide');
-
-                Swal.fire({
-                    icon: 'success',
-                    title: '¡Categoría actualizada!',
-                    text: `Se cambió la categoría de "${nombreCategoriaAnterior}" a "${nombreCategoria}".`,
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                }).then(() => {
-                    $("#btnCategorias").trigger("click"); // Recarga la vista dinámica
-                });
-            },
-            error: function (xhr, status, error) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'No se pudo editar la categoría.',
-                    confirmButtonColor: '#d33'
-                });
-            }
-        });
-    });
-
 }

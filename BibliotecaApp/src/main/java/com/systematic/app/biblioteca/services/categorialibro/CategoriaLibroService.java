@@ -17,4 +17,5 @@ public interface CategoriaLibroService {
     void insertarCategoriaLibro(CategoriaLibro categoria);
     void actualizarCategoriaLibro(CategoriaLibro categoria);
     void eliminarCategoriaLibro(Integer id);
+    int totalRegistros();
 }

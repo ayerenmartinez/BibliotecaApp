@@ -9,7 +9,6 @@ import java.util.Optional;
  *
  * @author anthony
  */
-
 public class CategoriaLibroServiceImpl implements CategoriaLibroService {
 
     private final CategoriaLibroDAO categoriaLibroDAO;
@@ -46,6 +45,11 @@ public class CategoriaLibroServiceImpl implements CategoriaLibroService {
     @Override
     public void eliminarCategoriaLibro(Integer id) {
         categoriaLibroDAO.eliminar(id);
+    }
+
+    @Override
+    public int totalRegistros() {
+        return categoriaLibroDAO.totalRegistros();
     }
 
 }

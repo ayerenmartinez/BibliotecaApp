@@ -10,7 +10,7 @@
             <div class="icon">
                 <i class="fas fa-book"></i>
             </div>
-            <a href="#" class="small-box-footer">Ver más <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="#" class="small-box-footer" id="verLibros">Ver más <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
 
@@ -24,7 +24,7 @@
             <div class="icon">
                 <i class="fas fa-users"></i>
             </div>
-            <a href="#" class="small-box-footer">Ver más <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="#" class="small-box-footer" id="verUsuarios">Ver más <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
 
@@ -38,7 +38,7 @@
             <div class="icon">
                 <i class="fas fa-exchange-alt"></i>
             </div>
-            <a href="#" class="small-box-footer">Ver más <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="#" class="small-box-footer" id="verPrestamos">Ver más <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
 
@@ -46,13 +46,13 @@
     <div class="col-lg-3 col-6">
         <div class="small-box bg-danger">
             <div class="inner">
-                <h3>12</h3>
+                <h3 id="totalCategorias">0</h3>
                 <p>Categorías</p>
             </div>
             <div class="icon">
                 <i class="fas fa-layer-group"></i>
             </div>
-            <a href="#" class="small-box-footer">Ver más <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="#" class="small-box-footer" id="verCategorias">Ver más <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
 
@@ -66,7 +66,7 @@
             <div class="icon">
                 <i class="fas fa-building"></i>
             </div>
-            <a href="#" class="small-box-footer">Ver más <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="#" class="small-box-footer" id="verEditoriales">Ver más <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
 
@@ -74,13 +74,13 @@
     <div class="col-lg-3 col-6">
         <div class="small-box bg-secondary">
             <div class="inner">
-                <h3>35</h3>
+                <h3 id="totalAutores">0</h3>
                 <p>Autores</p>
             </div>
             <div class="icon">
                 <i class="fas fa-user-edit"></i>
             </div>
-            <a href="#" class="small-box-footer">Ver más <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="#" class="small-box-footer" id="verAutores">Ver más <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
 
@@ -94,8 +94,10 @@
             <div class="icon">
                 <i class="fas fa-user-tie"></i>
             </div>
-            <a href="#" class="small-box-footer">Ver más <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="#" class="small-box-footer" id="verCargos">Ver más <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
 
 </div>
+<!-- Script exclusivo del dashboard -->
+<script src="${pageContext.request.contextPath}/js/dashboard.js"></script>

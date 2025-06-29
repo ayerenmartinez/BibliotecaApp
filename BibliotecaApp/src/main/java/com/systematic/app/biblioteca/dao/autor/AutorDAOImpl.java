@@ -31,6 +31,8 @@ public class AutorDAOImpl implements AutorDAO {
                     Autor autor = new Autor();
                     autor.setIdAutor(rs.getInt("idAutor"));
                     autor.setNombreAutor(rs.getString("nombreAutor"));
+                    autor.setApellidoPaterno(rs.getString("apellidoPaterno"));
+                    autor.setApellidoMaterno(rs.getString("apellidoMaterno"));
                     return Optional.of(autor);
                 }
             } catch (Exception e) {
@@ -52,6 +54,8 @@ public class AutorDAOImpl implements AutorDAO {
                     Autor autor = new Autor();
                     autor.setIdAutor(rs.getInt("idAutor"));
                     autor.setNombreAutor(rs.getString("nombreAutor"));
+                    autor.setApellidoPaterno(rs.getString("apellidoPaterno"));
+                    autor.setApellidoMaterno(rs.getString("apellidoMaterno"));
                     return Optional.of(autor);
                 }
             } catch (Exception e) {
@@ -73,6 +77,8 @@ public class AutorDAOImpl implements AutorDAO {
                 Autor autor = new Autor();
                 autor.setIdAutor(rs.getInt("idAutor"));
                 autor.setNombreAutor(rs.getString("nombreAutor"));
+                autor.setApellidoPaterno(rs.getString("apellidoPaterno"));
+                autor.setApellidoMaterno(rs.getString("apellidoMaterno"));
                 listaAutores.add(autor);
             }
         } catch (Exception e) {
@@ -83,22 +89,26 @@ public class AutorDAOImpl implements AutorDAO {
 
     @Override
     public int insertar(Autor autor) {
-        String sql = "INSERT INTO autor(nombreAutor) values (?)";
+        String sql = "INSERT INTO autor(nombreAutor,apellidoPaterno,apellidoMaterno) values (?,?,?)";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, autor.getNombreAutor());
+            ps.setString(2, autor.getApellidoPaterno());
+            ps.setString(3, autor.getApellidoMaterno());
             return ps.executeUpdate();
         } catch (Exception e) {
             e.getMessage();
             return 0;
         }
     }
-
+                                                                        
     @Override
     public int actualizar(Autor autor) {
-        String sql = "UPDATE autor SET nombreAutor=? WHERE idAutor=?";
+        String sql = "UPDATE autor SET nombreAutor=?,apellidoPaterno=?,apellidoMaterno=? WHERE idAutor=?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, autor.getNombreAutor());
-            ps.setInt(2, autor.getIdAutor());
+            ps.setString(2, autor.getApellidoPaterno());
+            ps.setString(3, autor.getApellidoMaterno());
+            ps.setInt(4, autor.getIdAutor());
             return ps.executeUpdate();
         } catch (Exception e) {
             e.getMessage();
